@@ -1,0 +1,14 @@
+artifact_uri: file:///z:/Day8/mlruns/265253675964281786/71a65870e59549c5b506f609c51bc978/artifacts
+end_time: 1773309446643
+entry_point_name: ''
+experiment_id: '265253675964281786'
+lifecycle_stage: active
+run_id: 71a65870e59549c5b506f609c51bc978
+run_name: rag_v1_registered
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1773309379842
+status: 3
+tags: []
+user_id: agenticaiuser

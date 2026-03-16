@@ -1,0 +1,66 @@
+LangChain with Azure OpenAI: Building
+Retrieval-Augmented Generation (RAG)
+This guide explains how to build a Retrieval-Augmented Generation (RAG) system using
+LangChain and Azure OpenAI. RAG allows large language models to answer questions based on
+external documents by retrieving relevant information and feeding it into the model prompt.
+1. What is RAG?
+Retrieval-Augmented Generation (RAG) combines a retrieval system with a language model.
+Instead of relying only on the model’s training data, RAG retrieves relevant information from
+external sources such as PDFs, databases, or documents and includes it in the prompt to produce
+accurate and grounded answers.
+2. Architecture Overview
+• Load documents from sources (PDF, text files, websites, etc.)
+• Split documents into smaller chunks
+• Convert chunks into embeddings using Azure OpenAI embeddings
+• Store embeddings in a vector database (FAISS, Chroma, etc.)
+• Retrieve relevant chunks for a user query
+• Send retrieved context to Azure OpenAI model for final answer
+3. Install Required Libraries
+pip install langchain langchain-openai faiss-cpu pypdf python-dotenv
+4. Configure Azure OpenAI
+import os
+os.environ["AZURE_OPENAI_ENDPOINT"] = "https://your-resource.openai.azure.com/"
+os.environ["AZURE_OPENAI_API_KEY"] = "your-api-key"
+os.environ["AZURE_OPENAI_DEPLOYMENT"] = "gpt-4o"
+5. Load Documents
+from langchain.document_loaders import PyPDFLoader
+loader = PyPDFLoader("document.pdf")
+documents = loader.load()
+6. Split Documents
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+text_splitter = RecursiveCharacterTextSplitter(
+ chunk_size=1000,
+ chunk_overlap=200
+)
+chunks = text_splitter.split_documents(documents)
+7. Create Embeddings and Vector Store
+from langchain_openai import AzureOpenAIEmbeddings
+from langchain.vectorstores import FAISS
+embeddings = AzureOpenAIEmbeddings(
+ azure_deployment="text-embedding-3-large"
+)
+vector_store = FAISS.from_documents(chunks, embeddings)
+8. Build Retrieval QA Chain
+from langchain_openai import AzureChatOpenAI
+from langchain.chains import RetrievalQA
+llm = AzureChatOpenAI(
+ azure_deployment="gpt-4o",
+ temperature=0
+)
+qa_chain = RetrievalQA.from_chain_type(
+ llm=llm,
+ retriever=vector_store.as_retriever()
+)
+query = "What does the document say about AI agents?"
+response = qa_chain.run(query)
+print(response)
+9. Benefits of RAG
+• Reduces hallucinations by grounding responses in real documents
+• Allows models to use up-to-date enterprise knowledge
+• Improves accuracy for domain-specific queries
+• Supports private data sources securely
+10. Typical Use Cases
+• Enterprise knowledge assistants
+• Document question answering systems
+• Customer support chatbots
+• Internal company search tools

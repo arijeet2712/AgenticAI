@@ -1,0 +1,10 @@
+artifact_location: file:///z:/Day8/mlruns/265253675964281786/models/m-569cd30e1f4540b1bc881b39c552762c/artifacts
+creation_timestamp: 1773309384757
+experiment_id: '265253675964281786'
+last_updated_timestamp: 1773309442291
+model_id: m-569cd30e1f4540b1bc881b39c552762c
+model_type: null
+name: rag_chain
+source_run_id: 71a65870e59549c5b506f609c51bc978
+status: 2
+status_message: null

@@ -1,0 +1,155 @@
+========================================================
+Z DRIVE AUTO-SYNC SETUP USING ROBOCOPY & TASK SCHEDULER
+========================================================
+
+PURPOSE
+-------
+Automatically keep an offline copy of Z:\ drive in sync on the local machine
+using Robocopy and Windows Task Scheduler.
+
+This setup runs in the background and syncs changes at regular intervals
+without manual intervention.
+
+--------------------------------------------------------
+STEP 1: CREATE THE POWERSHELL SCRIPT
+--------------------------------------------------------
+
+1. Create a folder:
+   C:\Scripts
+
+2. Create a PowerShell file:
+   C:\Scripts\ZDrive_AutoSync.ps1
+
+3. Paste the below script into the file:
+
+--------------------------------------------------------
+SCRIPT CONTENT
+--------------------------------------------------------
+
+$Source = "Z:\"
+$Target = Join-Path (:GetFolderPath("Desktop")) "OfflineCopy"
+$LogDir = "C:\Scripts\Logs"
+
+New-Item -ItemType Directory -Path $Target -Force | Out-Null
+New-Item -ItemType Directory -Path $LogDir -Force | Out-Null
+
+$LogFile = Join-Path $LogDir ("ZDriveSync_" + (Get-Date -Format "yyyyMMdd") + ".log")
+
+robocopy $Source $Target `
+    /MIR `
+    /COPY:DAT `
+    /DCOPY:T `
+    /R:2 `
+    /W:2 `
+    /XJ `
+    /MT:16 `
+    /XO `
+    /ETA `
+    /LOG+:$LogFile
+
+--------------------------------------------------------
+STEP 2: TEST THE SCRIPT MANUALLY
+--------------------------------------------------------
+
+Open PowerShell as Administrator and run:
+
+powershell -ExecutionPolicy Bypass -File C:\Scripts\ZDrive_AutoSync.ps1
+
+Verify:
+- OfflineCopy folder is created on Desktop
+- Files from Z:\ are synced
+- Log file is created under C:\Scripts\Logs
+
+--------------------------------------------------------
+STEP 3: CREATE TASK SCHEDULER JOB
+--------------------------------------------------------
+
+1. Press Win + R
+2. Type: taskschd.msc
+3. Press Enter
+
+--------------------------------------------------------
+STEP 4: CREATE TASK
+--------------------------------------------------------
+
+1. Click "Task Scheduler Library"
+2. Click "Create Task" (NOT Basic Task)
+
+GENERAL TAB
+-----------
+Name: ZDrive Auto Sync
+✔ Run whether user is logged on or not
+✔ Run with highest privileges
+Configure for: Windows 10 / Windows 11
+
+--------------------------------------------------------
+STEP 5: CONFIGURE TRIGGER
+--------------------------------------------------------
+
+1. Go to Triggers tab → New
+2. Begin the task: On a schedule
+3. Daily
+4. Repeat task every: 5 minutes
+5. Duration: Indefinitely
+6. Click OK
+
+--------------------------------------------------------
+STEP 6: CONFIGURE ACTION
+--------------------------------------------------------
+
+1. Go to Actions tab → New
+2. Action: Start a program
+
+Program/script:
+powershell.exe
+
+Add arguments:
+-NoProfile -ExecutionPolicy Bypass -File "C:\Scripts\ZDrive_AutoSync.ps1"
+
+Start in:
+C:\Scripts
+
+Click OK
+
+--------------------------------------------------------
+STEP 7: CONDITIONS & SETTINGS
+--------------------------------------------------------
+
+Conditions Tab:
+- Uncheck "Stop if the computer switches to battery power" (if laptop)
+
+Settings Tab:
+✔ Allow task to be run on demand
+✔ Restart task if it fails
+✔ Stop the task if it runs longer than 1 hour
+
+--------------------------------------------------------
+STEP 8: SAVE TASK
+--------------------------------------------------------
+
+- Click OK
+- Enter Windows credentials when prompted
+
+--------------------------------------------------------
+HOW IT WORKS
+--------------------------------------------------------
+
+- Every 5 minutes, the task runs Robocopy
+- New or modified files in Z:\ are synced to OfflineCopy
+- Deleted files in Z:\ are also deleted in OfflineCopy (/MIR)
+- Logs are stored in: C:\Scripts\Logs
+
+--------------------------------------------------------
+IMPORTANT NOTES
+--------------------------------------------------------
+
+- /MIR creates a TRUE MIRROR
+  (Deletes files in OfflineCopy if deleted from Z:\)
+
+- If delete is NOT required, replace /MIR with /E in the script
+
+- Do NOT use timestamped folders for auto-sync
+
+--------------------------------------------------------
+END OF DOCUMENT
+--------------------------------------------------------

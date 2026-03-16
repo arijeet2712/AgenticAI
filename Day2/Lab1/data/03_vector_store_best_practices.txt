@@ -1,0 +1,26 @@
+Vector Store Best Practices (Notes)
+Last updated: 2025-08-11
+
+Why a vector store
+A vector store enables fast similarity search over embeddings. This is the core building block behind semantic search
+and Retrieval-Augmented Generation (RAG).
+
+Indexing recommendations
+- Normalize vectors if you want cosine similarity (cosine = dot product on normalized vectors).
+- Keep a stable mapping between the vector row and its metadata (doc_id, chunk_id, title, tokens).
+- Store enough metadata to support filtering: product, department, version, updated_at, ACL tags.
+
+Chunking guidance
+- Start with 200–800 token chunks and 10–20% overlap.
+- Use headings and structure when available (section-aware chunking) rather than purely fixed windows.
+- Avoid very small chunks unless you have a reranker or a strong metadata strategy.
+
+Retrieval tips
+- Retrieve more than you show (e.g., fetch_k=20) and then apply reranking/diversification to select final_k=5.
+- Use MMR to reduce redundancy when many chunks are similar.
+- Consider a simple keyword overlap score as a tie-breaker if semantic scores are close.
+
+Quality and safety
+- Do not embed secrets.
+- For regulated content, keep an audit trail: query, retrieved chunk ids, and answer with citations.
+- Re-embed only when documents change; otherwise reuse persisted indexes.

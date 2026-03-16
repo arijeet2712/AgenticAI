@@ -1,0 +1,16 @@
+creation_timestamp: 1773309443631
+current_stage: None
+deployment_job_state: null
+description: null
+last_updated_timestamp: 1773309443631
+model_id: m-569cd30e1f4540b1bc881b39c552762c
+name: azure_rag_chain
+run_id: 71a65870e59549c5b506f609c51bc978
+run_link: null
+source: models:/m-569cd30e1f4540b1bc881b39c552762c
+status: READY
+status_message: null
+storage_location: file:///z:/Day8/mlruns/265253675964281786/models/m-569cd30e1f4540b1bc881b39c552762c/artifacts
+user_id: null
+version: 1
+workspace: default

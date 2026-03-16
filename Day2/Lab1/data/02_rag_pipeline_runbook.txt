@@ -1,0 +1,37 @@
+RAG Pipeline Runbook (Simplified)
+Version: 2.0 | Last updated: 2025-10-02
+
+Objective
+Enable users to query internal documentation and receive grounded answers with citations.
+
+High-level flow
+1) Ingest documents
+- Sources: knowledge base articles, SOPs, runbooks, FAQs, product notes
+- Extract text and normalize whitespace
+- Attach metadata: doc_id, title, category, owner, updated_at
+
+2) Chunking
+- Chunk by tokens (not characters) to respect model context limits
+- Recommended starting point: 400 tokens with 50-token overlap
+- Remove chunks with < 40 tokens unless they are critical headings
+
+3) Embeddings + indexing
+- Generate embeddings for each chunk (same model for query and documents)
+- Store in a vector index (FAISS for local dev; managed vector store for production)
+- Persist metadata alongside embeddings: chunk_id, source, page/section, token_count
+
+4) Retrieval
+- Embed the user query
+- Retrieve top-k by cosine similarity
+- Apply filters (e.g., product=AzureVDI, category=Networking) and access control rules
+- Optionally diversify results using MMR to avoid duplicates
+
+5) Answer generation (grounded)
+- Provide the top passages to the chat model as "sources"
+- Instruct the model to answer only using sources, and cite references like [S1], [S2]
+- If sources do not contain the answer, the model should say it does not know
+
+Operational checks
+- Validate chunk quality (duplicates, too-short chunks, boilerplate)
+- Monitor retrieval accuracy using a small benchmark of questions
+- Track latency and cost drivers: token counts and embedding batch sizes

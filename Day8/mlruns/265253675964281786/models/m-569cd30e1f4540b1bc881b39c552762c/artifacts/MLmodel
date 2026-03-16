@@ -1,0 +1,34 @@
+artifact_path: file:///z:/Day8/mlruns/265253675964281786/models/m-569cd30e1f4540b1bc881b39c552762c/artifacts
+env_vars:
+- AZURE_OPENAI_API_KEY
+flavors:
+  langchain:
+    code: null
+    langchain_version: 1.2.11
+    streamable: true
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.langchain
+    model_code_path: \\260302aaibatch.file.core.windows.net\20260302acclaixlabfiles\Day8\rag_chain_code\chain.py
+    predict_stream_fn: predict_stream
+    python_version: 3.12.1
+    streamable: true
+is_signature_from_type_hint: false
+mlflow_version: 3.10.1
+model_id: m-569cd30e1f4540b1bc881b39c552762c
+model_size_bytes: 2964
+model_uuid: m-569cd30e1f4540b1bc881b39c552762c
+prompts: null
+run_id: 71a65870e59549c5b506f609c51bc978
+saved_input_example_info:
+  artifact_path: input_example.json
+  serving_input_path: serving_input_example.json
+  type: json_object
+signature:
+  inputs: '[{"type": "string", "required": true}]'
+  outputs: '[{"type": "any", "required": true}]'
+  params: null
+type_hint_from_example: false
+utc_time_created: '2026-03-12 09:56:28.883041'

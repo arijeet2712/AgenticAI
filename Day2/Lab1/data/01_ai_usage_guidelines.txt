@@ -1,0 +1,33 @@
+AI Usage Guidelines (Internal Knowledge Base Excerpt)
+Version: 1.3 | Last updated: 2025-09-18
+
+Purpose
+These guidelines describe how teams may use AI tools for drafting, summarization, coding assistance, and analytics,
+while maintaining security, privacy, and quality standards.
+
+Key principles
+1) Data classification
+- Public: may be used freely.
+- Internal: may be used only with approved AI services and access controls.
+- Confidential/Restricted: must not be sent to external services unless explicitly approved.
+
+2) Prompt hygiene
+- Do not include secrets, API keys, passwords, or private customer identifiers in prompts.
+- Use placeholders (e.g., <API_KEY>, <CUSTOMER_ID>) and secure configuration stores.
+
+3) Human review
+- AI outputs must be reviewed for accuracy, bias, and completeness before use in production materials.
+- Claims must be validated against source documents when the content is used for compliance, legal, or finance topics.
+
+4) Logging and traceability
+- Where feasible, store the user question, retrieval sources, and final answer for auditability.
+- Maintain citation-style references (document id + section/chunk id) for grounded answers.
+
+Examples of acceptable use
+- Drafting email templates and internal communications
+- Summarizing internal documentation that is already approved for internal sharing
+- Generating unit-test scaffolding and refactoring suggestions (with review)
+
+Examples of prohibited use
+- Submitting private customer data without approval
+- Using AI output as a final decision for hiring, compensation, or disciplinary action
